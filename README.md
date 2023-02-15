@@ -1,4 +1,4 @@
-# Inference Runner Test App
+# Start Inference Runner Test App
 1. `docker-compose up`
 2. https://localhost
 
@@ -9,10 +9,10 @@
 4. Added redirect all HTTP requests to HTTPS
 
 # Express
-`4`. Configuration options can be changed using docker-compose `environment`
-1. Retry pattern is used as Resiliency pattern
-2. Assuming `Inference Runner` service responds with a reasonable amount of chunks. In the other case, pagination should be mentioned in the requirements
-3. **Question:** If some chunks can't be fetched for any reason. What preferred behavior should be?
+1. Configuration options can be changed using docker-compose `environment`
+2. Retry pattern is used as Resiliency pattern
+3. Assuming `Inference Runner` service responds with a reasonable amount of chunks. In the other case, pagination should be mentioned in the requirements
+4. **Question:** If some chunks can't be fetched for any reason. What preferred behavior should be?
   - Search request is failed
   - Response should contain only fetched chunks
   - failed chunk returned empty html?
