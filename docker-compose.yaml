@@ -1,0 +1,39 @@
+version: "3.3"
+
+services:
+
+  backend:
+    build:
+      dockerfile: ./dockerfiles/backend/Dockerfile
+    volumes:
+      - ./backend/:/w
+      - '/w/node_modules'
+    environment:
+      - DEBUG=*
+      - RETRY_COUNT=10
+      - URL_GENERATE_TOKEN=https://chunk-holder.hw.ask-ai.co/auth/generate-token
+      - URL_GET_CHUNKS_LIST=https://inference-runner.hw.ask-ai.co/ask
+      - URL_GET_CHUNK=https://chunk-holder.hw.ask-ai.co/chunks/
+      - CONFIDENCE_LEVEL=70
+      - INFERENCE_API_KEYS=7c4e87e6-aef8-467a-b43a-4f80147453bf,3211bc12-9ba4-4169-b8a3-dbc92494fa76,e4f24b15-f271-4abd-8c8f-3ec106941bfa
+      - CHUNK_API_KEYS=d486a94c-29f4-453a-a822-f909a97dbfa7,aa156e6b-0f41-4ef7-ae7a-f9ff8b5b5ad3,43ecda4c-7ee1-4acb-a50f-7f81e4c90719
+
+  frontend:
+    build:
+      dockerfile: ./dockerfiles/frontend/Dockerfile
+    volumes:
+      - ./frontend/:/w/
+      - '/w/node_modules'
+
+  proxy:
+    build:
+      dockerfile: ./dockerfiles/nginx/Dockerfile
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - ${APP_PORT:-80}:80/tcp
+      - ${APP_SPORT:-443}:443/tcp
+    volumes:
+      - ./dockerfiles/nginx:/etc/nginx/conf.d:ro
+      - ./dockerfiles/nginx/certs:/etc/nginx/certs:ro
